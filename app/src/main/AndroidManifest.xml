@@ -10,6 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PGPT1">
         <activity
+            android:name=".AsymmetricKeyGenerationActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_ASYMMETRIC_KEY_START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
