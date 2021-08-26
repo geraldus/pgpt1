@@ -22,13 +22,17 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
     }
     private val mKeyAlias = "${mUsername}_key"
 
-    private var mKeyStore: KeyStore? = null
+    private var keyStore: KeyStore = KeyStore.getInstance(KeyStore.getDefaultType())//"AndroidKeyStore")
+
+    init {
+        println("PGPT: Default key store type = ${KeyStore.getDefaultType()}")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAsymmetricKeyGenerationBinding.inflate(layoutInflater)
 
-        mKeyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+        keyStore.apply { load(null) }
 
         binding.editUsername.doAfterTextChanged {
             onUsernameChange(it)
@@ -51,7 +55,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
         keyPairGenerator.initialize(
             KeyGenParameterSpec.Builder(
                 mKeyAlias,
-                KeyProperties.PURPOSE_ENCRYPT
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             )
                 .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
@@ -59,12 +63,24 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
         )
         val keyPair = keyPairGenerator.generateKeyPair()
         val pubKey = Base64.getEncoder().encode(keyPair.public.encoded)
-        binding.publicKey.setText(
-            pubKey.decodeToString()
-//            keyPair.public.format + "\n" +
+        binding.publicKey.setText(pubKey.decodeToString())
+        //            keyPair.public.format + "\n" +
 //                    keyPair.public.algorithm + "\n" +
-        )
 
+        val privateKey = Base64.getEncoder().encode(keyPair.private.encoded)
+        binding.privateKey.setText(privateKey.decodeToString())
+
+        keyStore.store()
+
+//        keyStore.setEntry(mKeyAlias)
+
+        val privateKeyStored = keyStore.getKey(mKeyAlias, null)
+        val publicKey = store.getCertificate(mKeyAlias).publicKey
+                println("KEYS: private -> $privateKey")
+                println("KEYS: public -> $publicKey")
+                println("KEYS: public -> ${publicKey.encoded}")
+                mUsernameTouched.value = false
+        }
 
 //        if (mKeyStore != null) {
 //            try {

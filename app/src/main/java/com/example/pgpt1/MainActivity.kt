@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.security.KeyStore
+import java.security.KeyStoreException
 import java.security.cert.Certificate
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private val binding get() = _binding!!
 
+    private val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,7 +43,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        runChecks()
+        initKeyStore()
+//        runChecks()
 
         val view = binding.root
         setContentView(view)
@@ -48,11 +52,65 @@ class MainActivity : AppCompatActivity() {
 
     private var mCerts: Array<out Certificate>? = null
 
+    private fun initKeyStore() {
+        CoroutineScope(Dispatchers.IO).launch {
+            initKeyStoreAsync(this@MainActivity::onKeyStoreInitialized)
+        }
+    }
+
+    private suspend fun initKeyStoreAsync(onDone: (() -> Unit)? = null, onError: ((error: KeyStoreException) -> Unit)? = null) {
+        withContext(Dispatchers.IO) {
+            val result = kotlin.runCatching {
+                keyStore.load(null)
+            }.onFailure { error ->
+                withContext(Dispatchers.Main) {
+                    println("PGPT: Key store initialization failed")
+                    error.printStackTrace()
+                    onError?.invoke(error as KeyStoreException)
+                }
+            }.onSuccess {
+                withContext(Dispatchers.Main) {
+                    onDone?.invoke()
+                }
+            }
+        }
+    }
+
+    private fun onKeyStoreInitialized() {
+        runChecks()
+    }
+
     private fun runChecks() {
         binding.statusView.text = getString(R.string.msg_running_cert_chain_get)
-        println("MAIN: running checks")
+        println("PGPT: running checks")
         CoroutineScope(Dispatchers.IO).launch {
             check()
+        }
+    }
+
+    private suspend fun check() {
+        CoroutineScope(Dispatchers.IO).runCatching {
+            val keystore = KeyStore.getInstance(KeyStore.getDefaultType())
+                .apply {
+                    load(null)
+                    println("PGPT: KeyStore aliases: ${aliases()}")
+                }
+            val aliases = keystore.aliases()
+//            keystore.setKeyEntry()
+            while (aliases.hasMoreElements()) {
+                val a = aliases.nextElement()
+                println("PGPT: Alias $a")
+            }
+            var result: Array<out Certificate>? = null
+
+            try {
+                val certs = keystore.getCertificateChain("AndroidKeyStore")
+                result = certs
+            } catch (e: IllegalStateException) {
+                withContext(Dispatchers.Main) { illegalStateError(e) }
+            } finally {
+                getCertsDone(result)
+            }
         }
     }
 
@@ -64,28 +122,12 @@ class MainActivity : AppCompatActivity() {
             }else {
                 TODO("Check all certs")
             }
-            println("MAIN: certs done $certs")
-        }
-    }
-
-    private suspend fun check() {
-        val keystore = KeyStore.getInstance(KeyStore.getDefaultType())
-            .apply { load(null) }
-
-        var result: Array<out Certificate>? = null
-
-        try {
-            val certs = keystore.getCertificateChain("AndroidKeyStore")
-            result = certs
-        } catch (e: IllegalStateException) {
-            withContext(Dispatchers.Main) { illegalStateError(e) }
-        } finally {
-            getCertsDone(result)
+            println("PGPT: certs done $certs")
         }
     }
 
     private fun illegalStateError(e: IllegalStateException) {
-        println("MAIN: ERROR ${e.message}")
+        println("PGPT: ERROR ${e.message}")
         binding.statusView.text = getString(R.string.msg_keystore_illegal_state)
         e.printStackTrace()
     }
