@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             if (certs == null) {
                 binding.statusView.text = getString(R.string.msg_keystore_certs_null)
             }else {
-
+                TODO("Check all certs")
             }
             println("MAIN: certs done $certs")
         }
