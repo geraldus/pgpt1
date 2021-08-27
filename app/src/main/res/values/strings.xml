@@ -20,4 +20,10 @@
     <string name="msg_keystore_illegal_state">Key store state is illegal. Probably key store is not initialized</string>
     <string name="msg_keystore_certs_null">Key store returned no certificates</string>
     <string name="msg_key_already_exists">There is an existing key for "%1$s" username.</string>
+    <string name="hint_message_to_encrypt">Type your sectet message here</string>
+    <string name="label_message_to_encrypt">Message to be encrypted</string>
+    <string name="label_recipient">Recipient</string>
+    <string name="hint_type_username">Type username here</string>
+    <string name="label_encrypted_message">Encrypted message</string>
+    <string name="hint_encrypted_message">Encrypted message will be shown here</string>
 </resources>
