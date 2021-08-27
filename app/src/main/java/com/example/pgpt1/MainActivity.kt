@@ -4,14 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgpt1.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.RuntimeException
 import java.security.KeyStore
-import java.security.KeyStoreException
-import java.security.cert.Certificate
 
 class MainActivity : AppCompatActivity() {
     // Шифрование
@@ -51,16 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         val view = binding.root
         setContentView(view)
-    }
-
-    private fun onThrowableError(e: Throwable) {
-        onErrorGeneric(e.message) { e.printStackTrace() }
-    }
-
-    private fun onErrorGeneric(message: String?, printStackTrace: () -> Unit) {
-        println("PGPT: ERROR ${message}")
-        binding.statusView.text = getString(R.string.msg_keystore_illegal_state)
-        printStackTrace()
     }
 
     override fun onDestroy() {
