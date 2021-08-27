@@ -9,7 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.pgpt1.databinding.ActivityAsymmetricKeyGenerationBinding
+import com.example.pgpt1.model.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,14 +25,20 @@ import java.util.*
 import javax.security.auth.x500.X500Principal
 
 class AsymmetricKeyGenerationActivity : AppCompatActivity() {
+
     private var _binding: ActivityAsymmetricKeyGenerationBinding? = null
+
     private val binding get() = _binding!!
 
-    private var mUsername = ""
-    private val mUsernameTouched: MutableLiveData<Boolean> by lazy {
+    private val userModel: UserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+    private var username = ""
+
+    private val mKeyAlias get() = "${username}_key"
+
+    private val usernameTouched: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
-    private val mKeyAlias get() = "${mUsername}_key"
 
     private var keyStore: KeyStore =
         KeyStore.getInstance("AndroidKeyStore")
@@ -45,6 +53,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
 
         binding.editUsername.doAfterTextChanged {
             onUsernameChange(it)
+            binding.publicKey.text = null
         }
 
         binding.btnGenerate.isEnabled = true
@@ -67,14 +76,14 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
     private fun onKeyGenerationSuccess(keyPair: KeyPair) {
         setReady()
         val pubKey = Base64.getEncoder().encode(keyPair.public.encoded)
-        mUsernameTouched.value = false
+        usernameTouched.value = false
         binding.publicKey.setText(pubKey.decodeToString())
-
+        userModel.username.value = username
     }
 
-    private fun onKeyGenerationFailure() {
-        setReady()
-    }
+//    private fun onKeyGenerationFailure() {
+//        setReady()
+//    }
 
     private fun setBusy() {
         showProgress()
@@ -136,7 +145,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
 
     private fun checkKey() {
         CoroutineScope(Dispatchers.IO).launch {
-            checkKeysAsync(mUsername)
+            checkKeysAsync(username)
         }
     }
 
@@ -154,7 +163,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
 
     private fun onKeyAlreadyExist(cert: Certificate) {
         val builder = AlertDialog.Builder(this)
-        builder.setMessage(getString(R.string.msg_key_already_exists, mUsername))
+        builder.setMessage(getString(R.string.msg_key_already_exists, username))
             .setCancelable(true)
             .setPositiveButton(getString(R.string.btn_use_existing)) { dialog, id ->
                 val printableVal = Base64.getEncoder().encode(cert.publicKey.encoded)
@@ -173,8 +182,8 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
     }
 
     private fun onUsernameChange(it: Editable?) {
-        mUsername = it?.toString() ?: ""
-        mUsernameTouched.value = true
+        username = it?.toString() ?: ""
+        usernameTouched.value = true
     }
 
     override fun onDestroy() {
