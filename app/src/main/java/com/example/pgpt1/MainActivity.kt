@@ -95,10 +95,9 @@ class MainActivity : AppCompatActivity() {
             val keystore = KeyStore.getInstance("AndroidKeyStore")
                 .apply {
                     load(null)
-                    println("PGPT: KeyStore aliases: ${aliases()}")
+                    println("PGPT: KeyStore loaded")
                 }
             val aliases = keystore.aliases()
-//            keystore.setKeyEntry()
             while (aliases.hasMoreElements()) {
                 val a = aliases.nextElement()
                 println("PGPT: Alias $a")
