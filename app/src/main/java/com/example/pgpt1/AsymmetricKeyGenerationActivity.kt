@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.text.Editable
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.MutableLiveData
 import com.example.pgpt1.databinding.ActivityAsymmetricKeyGenerationBinding
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
+import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.KeyStore
+import java.security.cert.Certificate
 import java.util.*
-import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
 import javax.security.auth.x500.X500Principal
 
 class AsymmetricKeyGenerationActivity : AppCompatActivity() {
@@ -44,11 +47,10 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
             onUsernameChange(it)
         }
 
-        mUsernameTouched.observe(this, {
-            binding.btnGenerate.isEnabled = it
-        })
+        binding.btnGenerate.isEnabled = true
+
         binding.btnGenerate.setOnClickListener {
-            generateKeys()
+            checkKey()
         }
 
         val view = binding.root
@@ -56,6 +58,51 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
     }
 
     private fun generateKeys() {
+        setBusy()
+        CoroutineScope(Dispatchers.IO).launch {
+            generateKeysAsync()
+        }
+    }
+
+    private fun onKeyGenerationSuccess(keyPair: KeyPair) {
+        setReady()
+        val pubKey = Base64.getEncoder().encode(keyPair.public.encoded)
+        mUsernameTouched.value = false
+        binding.publicKey.setText(pubKey.decodeToString())
+
+    }
+
+    private fun onKeyGenerationFailure() {
+        setReady()
+    }
+
+    private fun setBusy() {
+        showProgress()
+        disableButton()
+    }
+
+    private fun setReady() {
+        hideProgress()
+        enableButton()
+    }
+
+    private fun disableButton() {
+        binding.btnGenerate.isEnabled = false
+    }
+
+    private fun enableButton() {
+        binding.btnGenerate.isEnabled = true
+    }
+
+    private fun showProgress() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private suspend fun generateKeysAsync() {
         println("PGPT: Generating key for <$mKeyAlias>")
 
         val keyPairGenerator =
@@ -74,23 +121,56 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
         }
         keyPairGenerator.initialize(parameterSpec)
         val keyPair = keyPairGenerator.generateKeyPair()
-        val pubKey = Base64.getEncoder().encode(keyPair.public.encoded)
-        binding.publicKey.setText(
-            keyPair.public.format + "\n" +
-                    keyPair.public.algorithm + "\n" +
-                    pubKey.decodeToString()
-        )
+
+        withContext(Dispatchers.Main) {
+            onKeyGenerationSuccess(keyPair)
+        }
 
         val publicKey = keyStore.getKey(mKeyAlias, null)
         val publicEntry =
             keyStore.getEntry(mKeyAlias, null)
-        val publicCert = keyStore.getCertificate(mKeyAlias)
+
         println("KEYS: public key -> ${publicKey ?: "null"}")
         println("KEYS: public entry -> ${publicEntry ?: "null"}")
-        println("KEYS: public cert -> $publicCert")
-        mUsernameTouched.value = false
     }
 
+    private fun checkKey() {
+        CoroutineScope(Dispatchers.IO).launch {
+            checkKeysAsync(mUsername)
+        }
+    }
+
+    private suspend fun checkKeysAsync(username: String) {
+        val cert = keyStore.getCertificate(mKeyAlias)
+        withContext(Dispatchers.Main) {
+            if (cert != null) {
+                println("KEYS: public cert -> $cert")
+                onKeyAlreadyExist(cert)
+            } else {
+                onKeyNotFound()
+            }
+        }
+    }
+
+    private fun onKeyAlreadyExist(cert: Certificate) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(getString(R.string.msg_key_already_exists, mUsername))
+            .setCancelable(true)
+            .setPositiveButton(getString(R.string.btn_use_existing)) { dialog, id ->
+                val printableVal = Base64.getEncoder().encode(cert.publicKey.encoded)
+                binding.publicKey.setText(printableVal.decodeToString())
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.btn_generate_new)) { dialog, id ->
+                generateKeys()
+            }
+        val alert = builder.create()
+        alert.show()
+    }
+
+    private fun onKeyNotFound() {
+        generateKeys()
+    }
 
     private fun onUsernameChange(it: Editable?) {
         mUsername = it?.toString() ?: ""

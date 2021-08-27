@@ -10,9 +10,12 @@
     <string name="hint_private_key">Your private key will be shown here</string>
 
     <string name="btn_key_pairs_generator">Asymmetric Key Pairs</string>
-    <string name="btn_generate">Generate</string>
+    <string name="btn_generate">Check / Generate</string>
+    <string name="btn_use_existing">Use existing key</string>
+    <string name="btn_generate_new">Generate new</string>
 
     <string name="msg_running_cert_chain_get">Fetching certs</string>
     <string name="msg_keystore_illegal_state">Key store state is illegal. Probably key store is not initialized</string>
     <string name="msg_keystore_certs_null">Key store returned no certificates</string>
+    <string name="msg_key_already_exists">There is an existing key for "%1$s" username.</string>
 </resources>
