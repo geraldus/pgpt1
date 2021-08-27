@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     private var mCerts: Array<out Certificate>? = null
 
     private fun initKeyStore() {
+        println("PGPT: Initializing key store")
         CoroutineScope(Dispatchers.IO).launch {
             initKeyStoreAsync(this@MainActivity::onKeyStoreInitialized)
         }
@@ -60,8 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun initKeyStoreAsync(onDone: (() -> Unit)? = null, onError: ((error: KeyStoreException) -> Unit)? = null) {
         withContext(Dispatchers.IO) {
-            val result = kotlin.runCatching {
+            kotlin.runCatching {
                 keyStore.load(null)
+                println("PGPT: Key store loaded")
             }.onFailure { error ->
                 withContext(Dispatchers.Main) {
                     println("PGPT: Key store initialization failed")
