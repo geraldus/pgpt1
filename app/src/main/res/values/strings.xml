@@ -10,6 +10,8 @@
     <string name="hint_private_key">Your private key will be shown here</string>
 
     <string name="btn_key_pairs_generator">Asymmetric Key Pairs</string>
+    <string name="btn_encrypt_message">Message encryption</string>
+
     <string name="btn_generate">Check / Generate</string>
     <string name="btn_use_existing">Use existing key</string>
     <string name="btn_generate_new">Generate new</string>

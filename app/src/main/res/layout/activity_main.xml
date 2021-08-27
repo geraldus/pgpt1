@@ -17,9 +17,16 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_key_pairs_generator" />
 
+        <Button
+            android:id="@+id/navToMessageEncryption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_encrypt_message" />
+
         <TextView
             android:id="@+id/statusView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

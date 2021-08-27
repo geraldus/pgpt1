@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity() {
 
         initKeyStore()
 //        runChecks()
+        binding.navToMessageEncryption.setOnClickListener {
+            val intent = Intent(MessageEncryptionActivity.ACTION_MESSAGE_ENCRYPTION_ACTIVITY_START)
+            startActivity(intent)
+        }
 
         val view = binding.root
         setContentView(view)
