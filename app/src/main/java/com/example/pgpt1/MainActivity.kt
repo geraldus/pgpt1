@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private val binding get() = _binding!!
 
-    private val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+    private val keyStore = KeyStore.getInstance("AndroidKeyStore")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun check() {
         CoroutineScope(Dispatchers.IO).runCatching {
-            val keystore = KeyStore.getInstance(KeyStore.getDefaultType())
+            val keystore = KeyStore.getInstance("AndroidKeyStore")
                 .apply {
                     load(null)
                     println("PGPT: KeyStore aliases: ${aliases()}")

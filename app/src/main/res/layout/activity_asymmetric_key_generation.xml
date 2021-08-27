@@ -71,21 +71,5 @@
             android:inputType="textMultiLine"
             android:minHeight="48dp" />
 
-        <TextView
-            android:id="@+id/labelPrivateKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_private_key" />
-
-        <EditText
-            android:id="@+id/privateKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:enabled="false"
-            android:hint="@string/hint_private_key"
-            android:inputType="textMultiLine"
-            android:minHeight="48dp"
-            android:importantForAutofill="no" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
