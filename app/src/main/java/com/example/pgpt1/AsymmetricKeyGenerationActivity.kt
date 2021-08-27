@@ -37,13 +37,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
         _binding = ActivityAsymmetricKeyGenerationBinding.inflate(layoutInflater)
 
         keyStore.apply {
-            try {
-                load(FileInputStream("com.example.pgpt1"), "123".toCharArray())
-                println("PGPT: Loaded custom key store")
-            } catch (e: Throwable) {
-                load(null)
-                println("PGPT: Initialized new key store")
-            }
+            load(null)
         }
 
         binding.editUsername.doAfterTextChanged {
@@ -87,31 +81,6 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
                     pubKey.decodeToString()
         )
 
-
-//        val privateKey = Base64.getEncoder().encode(keyPair.private.encoded)
-//        binding.privateKey.setText(privateKey.decodeToString())
-
-//        val secretKey = KeyStore.SecretKeyEntry()
-//        keyStore.setEntry(mKeyAlias)
-
-//        val protParam: KeyStore.ProtectionParameter = KeyStore.
-
-//        var key: SecretKey = object : SecretKey {
-//            override fun getAlgorithm() = "RSA"
-//
-//            override fun getFormat() = "X.509"
-//
-//            override fun getEncoded(): ByteArray {
-//                return keyPair.private.encoded
-//            }
-//        }
-//
-//        val entry: KeyStore.SecretKeyEntry = KeyStore.SecretKeyEntry(key)
-//        keyStore.setEntry(mKeyAlias, entry, null)
-
-        val privateKeyStored = keyStore.getKey(mKeyAlias, null)
-//        val publicKey = keyStore.getCertificate(mKeyAlias).publicKey
-//        println("KEYS: private -> $privateKey")
         val publicKey = keyStore.getKey(mKeyAlias, null)
         val publicEntry =
             keyStore.getEntry(mKeyAlias, null)
@@ -122,36 +91,10 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
         mUsernameTouched.value = false
     }
 
-//        if (mKeyStore != null) {
-//            try {
-//                val store = mKeyStore!!
-//                val privateKey = store.getKey(mKeyAlias, null)
-//                val publicKey = store.getCertificate(mKeyAlias).publicKey
-//                println("KEYS: private -> $privateKey")
-//                println("KEYS: public -> $publicKey")
-//                println("KEYS: public -> ${publicKey.encoded}")
-//                mUsernameTouched.value = false
-//            } catch (e: Throwable) {
-//                println("KEYS: Error: ${e.message}")
-//                e.printStackTrace()
-//            }
-//        }
-
 
     private fun onUsernameChange(it: Editable?) {
         mUsername = it?.toString() ?: ""
-        println("PGPT: Change $it <-> $mUsername")
         mUsernameTouched.value = true
-//        if (mKeyStore != null) {
-//            try {
-//                val store = mKeyStore!!
-//                val publicKey = store.getCertificate(mKeyAlias).publicKey
-//                binding.publicKey.setText(publicKey.encoded.toString())
-//            } catch (e: Throwable) {
-//                println("KEYS: Error: ${e.message}")
-//                e.printStackTrace()
-//            }
-//        }
     }
 
     override fun onDestroy() {
