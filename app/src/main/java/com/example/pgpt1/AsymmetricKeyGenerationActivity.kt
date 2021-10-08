@@ -5,6 +5,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.text.Editable
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
@@ -30,7 +31,7 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
 
     private val binding get() = _binding!!
 
-    private val userModel: UserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+    private val userModel: UserViewModel by viewModels()
 
     private var username = ""
 
@@ -121,11 +122,8 @@ class AsymmetricKeyGenerationActivity : AppCompatActivity() {
             mKeyAlias,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         ).run {
-            setCertificateSerialNumber(BigInteger.valueOf(777))
-            setCertificateSubject(X500Principal("CN=$mKeyAlias"))
-            setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-            setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PSS)
-            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+            setKeySize(2048)
             build()
         }
         keyPairGenerator.initialize(parameterSpec)
