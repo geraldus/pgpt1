@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgpt1.databinding.ActivityMainBinding
+import com.example.pgpt1.MessageDecryptionActivity.Companion.ACTION_MESSAGE_DECRYPTION_ACTIVITY_START
 import java.security.KeyStore
 
 class MainActivity : AppCompatActivity() {
@@ -26,8 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     private val binding get() = _binding!!
 
-    private val keyStore = KeyStore.getInstance("AndroidKeyStore")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.navToMessageEncryption.setOnClickListener {
             val intent = Intent(MessageEncryptionActivity.ACTION_MESSAGE_ENCRYPTION_ACTIVITY_START)
+            startActivity(intent)
+        }
+
+        binding.navToMessageDecryption.setOnClickListener {
+            val intent = Intent(ACTION_MESSAGE_DECRYPTION_ACTIVITY_START)
             startActivity(intent)
         }
 
