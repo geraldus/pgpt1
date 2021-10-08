@@ -4,17 +4,21 @@
     <string name="label_username">Your username</string>
     <string name="label_public_key">Your public key</string>
     <string name="label_private_key">Your private key</string>
+    <string name="label_session_key">Session key</string>
 
     <string name="hint_username">Type your username</string>
     <string name="hint_public_key">Your public key will be shown here</string>
     <string name="hint_private_key">Your private key will be shown here</string>
 
     <string name="btn_key_pairs_generator">Asymmetric Key Pairs</string>
-    <string name="btn_encrypt_message">Message encryption</string>
+    <string name="btn_nav_to_encrypt_message">Message encryption</string>
 
     <string name="btn_generate">Check / Generate</string>
     <string name="btn_use_existing">Use existing key</string>
+
     <string name="btn_generate_new">Generate new</string>
+    <string name="btn_generate_session_key">Generate session key</string>
+    <string name="btn_encrypt">Encrypt</string>
 
     <string name="msg_running_cert_chain_get">Fetching certs</string>
     <string name="msg_keystore_illegal_state">Key store state is illegal. Probably key store is not initialized</string>
@@ -26,4 +30,19 @@
     <string name="hint_type_username">Type username here</string>
     <string name="label_encrypted_message">Encrypted message</string>
     <string name="hint_encrypted_message">Encrypted message will be shown here</string>
+    <string name="msg_no_recipient_key">Recepient not found</string>
+    <string name="OK">OK</string>
+    <string name="btn_got_it">Got it</string>
+    <string name="label_session_key_encoded">Encoded session key</string>
+    <string name="label_iv_raw">IV raw value</string>
+    <string name="label_encrypted_secret">Encrypted loophole</string>
+    <string name="hint_iv">IV value will be shown here</string>
+    <string name="btn_decrypt">Decrypt</string>
+    <string name="btn_nav_to_decrypt_message">RSA Message Decryption</string>
+    <string name="hint_recipient_name">Recipient name</string>
+    <string name="label_message_to_decrypt">Encypted message to be decrypted</string>
+    <string name="hint_message_to_be_decrypted">Base64 encoded message</string>
+    <string name="label_decoded_message">Decoded message</string>
+    <string name="hint_decrypted_message">Decrypted message</string>
+    <string name="msg_decode_error">Decryption error</string>
 </resources>
