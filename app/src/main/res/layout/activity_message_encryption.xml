@@ -4,75 +4,138 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:isScrollContainer="true"
     android:padding="8dp"
     tools:context=".MessageEncryptionActivity">
 
-    <TextView
-        android:id="@+id/labelRecipient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_recipient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/recipient"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/hint_type_username"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelRecipient" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/hint_message_to_encrypt"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelMessage" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/labelMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/label_message_to_encrypt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipient" />
+            <TextView
+                android:id="@+id/labelRecipient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_recipient" />
 
-    <TextView
-        android:id="@+id/labelEncrypted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message" />
+            <EditText
+                android:id="@+id/recipient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/hint_type_username"
+                android:inputType="textPersonName"
+                android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/encrypted"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:enabled="false"
-        android:gravity="start|top"
-        android:hint="@string/hint_encrypted_message"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelEncrypted" />
+            <TextView
+                android:id="@+id/labelMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/label_message_to_encrypt" />
+
+            <EditText
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/hint_message_to_encrypt"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:minHeight="48dp"
+                android:minLines="1" />
+
+            <Button
+                android:id="@+id/encrypt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_encrypt" />
+
+            <TextView
+                android:id="@+id/labelEncryptedSecret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_encrypted_secret" />
+
+            <EditText
+                android:id="@+id/encodedSecret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textMultiLine|textPersonName"
+                android:minHeight="48dp"
+                android:minLines="1"
+                android:text="@string/label_session_key_encoded"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/labelRawSessionKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_session_key" />
+
+            <EditText
+                android:id="@+id/sessionKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textMultiLine|textPersonName"
+                android:minHeight="48dp"
+                android:minLines="1"
+                android:text="@string/label_session_key"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/labelIV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_iv_raw" />
+
+            <EditText
+                android:id="@+id/iv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/hint_iv"
+                android:inputType="textPersonName"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/labelEncryptedMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_encrypted_message" />
+
+            <EditText
+                android:id="@+id/encrypted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="start|top"
+                android:hint="@string/hint_encrypted_message"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:minLines="1" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

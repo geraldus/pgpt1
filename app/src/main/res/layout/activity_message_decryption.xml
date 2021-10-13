@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:isScrollContainer="true"
     android:padding="8dp"
-    tools:context=".MessageEncryptionActivity">
+    tools:context=".MessageDecryptionActivity">
 
     <ScrollView
         android:layout_width="match_parent"
