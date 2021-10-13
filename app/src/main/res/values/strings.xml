@@ -2,8 +2,8 @@
     <string name="app_name">PGPT1</string>
 
     <string name="label_username">Your username</string>
-    <string name="label_public_key">Your public key</string>
-    <string name="label_private_key">Your private key</string>
+    <string name="label_public_key">Public key</string>
+    <string name="label_private_key">Private key</string>
     <string name="label_session_key">Session key</string>
 
     <string name="hint_username">Type your username</string>
@@ -38,11 +38,17 @@
     <string name="label_encrypted_secret">Encrypted loophole</string>
     <string name="hint_iv">IV value will be shown here</string>
     <string name="btn_decrypt">Decrypt</string>
+    <string name="btn_nav_to_rsa_encrypt">RSA Message Encryption</string>
     <string name="btn_nav_to_decrypt_message">RSA Message Decryption</string>
     <string name="hint_recipient_name">Recipient name</string>
-    <string name="label_message_to_decrypt">Encypted message to be decrypted</string>
+    <string name="label_message_to_decrypt">Encrypted message to be decrypted</string>
+    <string name="hint_message_to_be_encrypted">Plain text message to be encrypted</string>
     <string name="hint_message_to_be_decrypted">Base64 encoded message</string>
     <string name="label_decoded_message">Decoded message</string>
     <string name="hint_decrypted_message">Decrypted message</string>
     <string name="msg_decode_error">Decryption error</string>
+    <string name="title_activity_message_encoding">MessageEncoding</string>
+    <string name="hint_recipient_public_key">Recipient public key</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
