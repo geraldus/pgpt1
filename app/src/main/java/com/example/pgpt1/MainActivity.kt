@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgpt1.databinding.ActivityMainBinding
 import com.example.pgpt1.MessageDecryptionActivity.Companion.ACTION_MESSAGE_DECRYPTION_ACTIVITY_START
+import com.example.pgpt1.rsa.MessageEncoding
 import java.security.KeyStore
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +44,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.navToMessageDecryption.setOnClickListener {
             val intent = Intent(ACTION_MESSAGE_DECRYPTION_ACTIVITY_START)
+            startActivity(intent)
+        }
+
+        binding.navToRsaMessageEncryption.setOnClickListener {
+            val intent = Intent(MessageEncoding.ACTION_MESSAGE_ENCRYPTION_ACTIVITY_START)
             startActivity(intent)
         }
 

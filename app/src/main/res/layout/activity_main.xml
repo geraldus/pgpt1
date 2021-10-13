@@ -24,10 +24,17 @@
             android:text="@string/btn_nav_to_encrypt_message" />
 
         <Button
+            android:id="@+id/navToRsaMessageEncryption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_nav_to_rsa_encrypt" />
+
+        <Button
             android:id="@+id/navToMessageDecryption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_nav_to_decrypt_message" />
+
 
         <TextView
             android:id="@+id/statusView"
